@@ -7,7 +7,7 @@ settings_json = json.dumps([
      'title': 'Custom Cards',
      'desc': 'Play with custom cards or an existing set of cards',
      'section': 'example',
-     'key': 'boolexample'},
+     'key': 'custom_card_options'},
     {'type': 'options',
      'title': 'Round timer',
      'desc': 'Duration of each round',

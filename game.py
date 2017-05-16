@@ -1,4 +1,4 @@
-import random, time
+import random, time, ConfigParser
 
 from threading import Timer
 
@@ -9,8 +9,8 @@ DECKS = 1
 SCORES = 2
 T1 = 3
 T2 = 4
-MAXTIME = 60
 DEBUG = True
+
 
 def getWord():
   print('\n' * 30)
@@ -101,14 +101,14 @@ class Team:
 class Game:
 
   # Initialize game
-  def __init__(self, players, rounds, cards):
-    self.setup(players, rounds, cards)
-    self.roundLength = 60
+  def __init__(self, players, rounds, time):
+    self.roundLength = time
+    self.setup(players, rounds, 3)
 
-  def setSettings(self, cards_per_player, rounds, players, round_timer):
+  def setSettings(self, cards_per_player, rounds, players, roundLength):
     self.setMaxRound(rounds)
     self.setTeams(players)
-    self.roundLength = round_timer
+    self.roundLength = roundLength
 
   # Assign player count
   def setTeams(self, players):
@@ -127,7 +127,7 @@ class Game:
   # Set game data
   def setup(self, players, rounds, cards):
     self.round = 0
-    self.time = self.round_timer
+    self.time = self.roundLength
     self.setMaxRound(rounds)
     self.setTeams(players)
     self.fill(cards)
@@ -177,7 +177,7 @@ class Game:
       self.timer.cancel()
       if not self.roundOver():
         print "Team {}, pass the phone".format({self.active - 2})
-        self.time = MAXTIME
+        self.time = self.roundLength
         self.show()
 
   # Ticks the timer
@@ -238,14 +238,21 @@ class Game:
 
     return self.score()
 
-## TESTING
-
 def test():
-  p = input("How many players? ")
-  r = input("How many rounds? ")
-  c = input("How many cards per player? ")
+  settings = ConfigParser.ConfigParser()
+  settings.read('settings.ini')
+  rounds = settings.get("example", "round_options")
+  time_set = settings.get("example", "timer_options")
+  time = 0
+  if time_set == '2 min':
+    time = 120
+  elif time_set == '1 min':
+    time = 60
+  else:
+    time = 30
 
-  game = Game(p, r, c)
+  players = input("How many players? ")
+  game = Game(players, rounds, time)
 
   score = game.roundPlay()
   while(score[2] + 1 < r):
@@ -258,3 +265,6 @@ def test():
       print 'TEAM 2 LEADS {} : {}'.format(score[1], score[2])
     if (game.getRound()):
       score = game.roundPlay()
+
+  settings_data.close()
+test()

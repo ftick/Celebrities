@@ -15,19 +15,19 @@ Builder.load_string('''
         on_release: app.open_settings()
 ''')
 
-#class Interface(BoxLayout):
-#    pass
+class Interface(BoxLayout):
+    pass
 
 class SettingsApp(App):
     def build(self):
         self.settings_cls = SettingsWithSidebar
         self.use_kivy_settings = False
-        setting = self.config.get('example', 'boolexample')
+        setting = self.config.get('example', 'custom_card_options')
         return Interface()
 
     def build_config(self, config):
         config.setdefaults('example', {
-            #'boolexample': True,
+            'custom_card_options': True,
             'round_options': '5',
             'timer_options': '1 min',
             #'stringexample': 'some_string',
