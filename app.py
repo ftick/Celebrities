@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.label import Label
 from kivy.properties import NumericProperty
 from kivy.app import App
 from kivy.lang import Builder
@@ -140,7 +141,7 @@ class AboutScreen(Screen):
 class RulesScreen(Screen):
     hue = NumericProperty(3)
 
-class DurationClock(Label):
+class DurationClock(Screen):
     def update(self, index, *args):
         self.text = index
 
