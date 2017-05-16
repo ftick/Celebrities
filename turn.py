@@ -1,6 +1,7 @@
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.app import App
 from kivy.uix.label import Label
+from kivy.properties import NumericProperty
 from kivy.clock import Clock
 from functools import partial
 import ConfigParser
@@ -33,6 +34,9 @@ Builder.load_string('''
         size: 200, 100
         on_release: root.manager.current = root.manager.next()
 ''')
+
+class TurnScreen(Screen):
+    hue = NumericProperty(0)
 
 class RoundClock(Label):
     def update(self, index, *args):

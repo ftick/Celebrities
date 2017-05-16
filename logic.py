@@ -11,247 +11,239 @@ T1 = 3
 T2 = 4
 DEBUG = True
 
-def getWord():
-  print('\n' * 30)
-  return raw_input("Word: ")
-
-def showWord(word):
-  print "NEW WORD: {}".format(word)
-
 ## CLASSES
 
 class Deck:
 
-  def __init__(self):
-    self.items = []
+    def __init__(self):
+        self.items = []
 
-  def isEmpty(self):
-    return self.items == []
+    def isEmpty(self):
+        return self.items == []
 
-  def push(self, item):
-    self.items.append(item)
+    def push(self, item):
+        self.items.append(item)
 
-  def pop(self):
-    return self.items.pop()
+    def pop(self):
+        return self.items.pop()
 
-  def peek(self):
-    return self.items[len(self.items)-1]
+    def peek(self):
+        return self.items[len(self.items)-1]
 
-  def size(self):
-    return len(self.items)
+    def size(self):
+        return len(self.items)
 
-  def shuffle(self):
-    for i in range(self.size() - 1, 0, -1):
-      j = random.randint(0,i)
-      temp = self.items[j]
-      self.items[j] = self.items[i]
-      self.items[i] = temp
+    def shuffle(self):
+        for i in range(self.size() - 1, 0, -1):
+            j = random.randint(0,i)
+            temp = self.items[j]
+            self.items[j] = self.items[i]
+            self.items[i] = temp
 
-  def draw(self):
-    card = self.peek()
-    self.pop()
-    return card
+    def draw(self):
+        card = self.peek()
+        self.pop()
+        return card
 
-  def insert_deck(self, deck2):
-    while not deck2.isEmpty():
-      self.push(deck2.draw())
+    def insert_deck(self, deck2):
+        while not deck2.isEmpty():
+            self.push(deck2.draw())
 
 class Team:
 
-  def __init__(self, players):
-    self.players = players
-    self.active = 0
-    self.points = 0
-    self.score = 0
-    self.yes = Deck()
-    self.no = Deck()
+    def __init__(self, players):
+        self.players = players
+        self.active = 0
+        self.points = 0
+        self.score = 0
+        self.yes = Deck()
+        self.no = Deck()
 
-  def clearPoints(self):
-    self.points = 0
+    def clearPoints(self):
+        self.points = 0
 
-  def getPoints(self):
-    return self.points
+    def getPoints(self):
+        return self.points
 
-  def clearNo(self):
-    self.no = Deck()
+    def clearNo(self):
+        self.no = Deck()
 
-  def clearYes(self):
-    self.yes = Deck()
+    def clearYes(self):
+        self.yes = Deck()
 
-  def remNo(self):
-    retval = self.no
-    self.clearNo()
-    return retval
+    def remNo(self):
+        retval = self.no
+        self.clearNo()
+        return retval
 
-  def remYes(self):
-    self.points += self.score
-    self.score = 0
-    retval = self.yes
-    self.clearYes()
-    return retval
+    def remYes(self):
+        self.points += self.score
+        self.score = 0
+        retval = self.yes
+        self.clearYes()
+        return retval
 
-  def add(self, item, correct):
-    if correct:
-      self.yes.push(item)
-      self.score += 1
-    else:
-      self.no.push(item)
+    def add(self, item, correct):
+        if correct:
+            self.yes.push(item)
+            self.score += 1
+        else:
+            self.no.push(item)
 
 class Game:
 
   # Initialize game
-  def __init__(self, players, rounds, time):
-    self.roundLength = time
-    self.setup(players, rounds, 3)
+    def __init__(self, players, rounds, time):
+        self.roundLength = time
+        self.setup(players, rounds, 3)
 
-  def setSettings(self, cards_per_player, rounds, players, roundLength):
-    self.setMaxRound(rounds)
-    self.setTeams(players)
-    self.roundLength = roundLength
+    def setSettings(self, cards_per_player, rounds, players, roundLength):
+        self.setMaxRound(rounds)
+        self.setTeams(players)
+        self.roundLength = roundLength
 
   # Assign player count
-  def setTeams(self, players):
-    self.players = players
-    p1 = players / 2
-    p2 = players - p1
-    self.team1 = Team(p1)
-    self.team2 = Team(p2)
-    if p1 == p2: self.active = random.randint(T1, T2)
-    else: self.active = T1
+    def setTeams(self, players):
+        self.players = players
+        p1 = players / 2
+        p2 = players - p1
+        self.team1 = Team(p1)
+        self.team2 = Team(p2)
+        if p1 == p2: self.active = random.randint(T1, T2)
+        else: self.active = T1
 
   # Assign number of rounds
-  def setMaxRound(self, rounds):
-    self.maxRound = rounds
+    def setMaxRound(self, rounds):
+        self.maxRound = rounds
 
   # Set game data
-  def setup(self, players, rounds, cards):
-    self.round = 0
-    self.time = self.roundLength
-    self.setMaxRound(rounds)
-    self.setTeams(players)
-    self.fill(cards)
-    self.shuffle()
+    def setup(self, players, rounds, cards):
+        self.round = 0
+        self.time = self.roundLength
+        self.setMaxRound(rounds)
+        self.setTeams(players)
+        self.fill(cards)
+        self.shuffle()
 
   # Fill draw_pile with words
-  def fill(self, cards):
-    self.draw_pile = Deck()
-    for i in range(0, self.players * cards):
-      self.draw_pile.push(getWord())
+    def fill(self, cards):
+        self.draw_pile = Deck()
+        for i in range(0, self.players * cards):
+            self.draw_pile.push(getWord())
 
   # Returns round #
-  def getRound(self):
-    return self.round
+    def getRound(self):
+        return self.round
 
   # Returns relevant team scores in a tuple
-  def score(self):
-    self.round += 1
-    return [self.team1.getPoints(), self.team2.getPoints(), self.round]
+    def score(self):
+        self.round += 1
+        return [self.team1.getPoints(), self.team2.getPoints(), self.round]
 
   # Shuffles words in draw_pile
-  def shuffle(self):
-    self.draw_pile.shuffle()
+    def shuffle(self):
+        self.draw_pile.shuffle()
 
   # Switch active team
-  def switch(self):
-    if self.active == T1: self.active = T2
-    else: self.active = T1
+    def switch(self):
+        if self.active == T1: self.active = T2
+        else: self.active = T1
 
   # Move active no pile back into draw_pile amd shuffle
-  def turnUpdate(self):
+    def turnUpdate(self):
     # self.timer.cancel()
-    self.draw_pile.insert_deck(self.team1.remNo())
-    self.draw_pile.insert_deck(self.team2.remNo())
-    self.switch()
+        self.draw_pile.insert_deck(self.team1.remNo())
+        self.draw_pile.insert_deck(self.team2.remNo())
+        self.switch()
 
   # Does something during tick
-  def tickAction(self):
-    if self.time > 0:
-      if DEBUG: print(self.time)
-      self.time -= 1
-      # Cancel timer
-      if not self.roundOver():
-        # Start timer
-        pass
-    else:
-      self.turnUpdate()
-      # Cancel timer
-      if not self.roundOver():
-        # Pass phone screen
-        self.time = self.roundLength
-        self.show()
+    def tickAction(self):
+        if self.time > 0:
+            if DEBUG: print(self.time)
+            self.time -= 1
+            # Cancel timer
+        if not self.roundOver():
+            # Start timer
+            pass
+        else:
+            self.turnUpdate()
+            # Cancel timer
+            if not self.roundOver():
+                # Pass phone screen
+                self.time = self.roundLength
+                self.show()
 
   # Displays a drawn word, adds to team's collection
-  def newWord(self):
-    self.card = self.draw_pile.peek()
-    self.show()
-    x = raw_input()
-    if not self.roundOver():
-      if self.active == T1:
-        self.team1.add(self.draw_pile.draw(), x == "Y")
-      else:
-        self.team2.add(self.draw_pile.draw(), x == "Y")
+    def newWord(self):
+        self.card = self.draw_pile.peek()
+        self.show()
+        x = raw_input()
+        if not self.roundOver():
+            if self.active == T1:
+                self.team1.add(self.draw_pile.draw(), x == "Y")
+            else:
+                self.team2.add(self.draw_pile.draw(), x == "Y")
 
-  def show(self):
-    showWord(self.card)
-    # self.tick()
+    def show(self):
+        showWord(self.card)
+        # self.tick()
 
   # Returns true if active no pile is empty
-  def activeEmpty(self):
-    if self.active == T1: self.team1.no.isEmpty()
-    else: return self.team2.no.isEmpty()
+    def activeEmpty(self):
+        if self.active == T1: self.team1.no.isEmpty()
+        else: return self.team2.no.isEmpty()
 
   # Returns true if draw_pile is empty
-  def drawEmpty(self):
-    return self.draw_pile.isEmpty()
+    def drawEmpty(self):
+        return self.draw_pile.isEmpty()
 
   # Returns true if there are no more cards to draw from
-  def roundOver(self):
-    return (self.drawEmpty() and (self.activeEmpty() == None))
+    def roundOver(self):
+        return (self.drawEmpty() and (self.activeEmpty() == None))
 
   # Reset some data to start new round
-  def roundUpdate(self):
-    if DEBUG: print "ROUND UPDATE"
-    self.draw_pile.insert_deck(self.team1.remYes())
-    self.draw_pile.insert_deck(self.team2.remYes())
+    def roundUpdate(self):
+        if DEBUG: print "ROUND UPDATE"
+        self.draw_pile.insert_deck(self.team1.remYes())
+        self.draw_pile.insert_deck(self.team2.remYes())
 
   # Plays through a single round of the game
-  def roundPlay(self):
+    def roundPlay(self):
 
-    if DEBUG: print "ROUND START"
+        if DEBUG: print "ROUND START"
 
-    while not self.roundOver():
-      if self.roundOver(): break
+        while not self.roundOver():
+            if self.roundOver(): break
 
-      if self.drawEmpty():
-        if self.active == T1: self.draw_pile.insert_deck(self.team1.remNo())
-        else: self.draw_pile.insert_deck(self.team2.remNo())
+            if self.drawEmpty():
+                if self.active == T1: self.draw_pile.insert_deck(self.team1.remNo())
+                else: self.draw_pile.insert_deck(self.team2.remNo())
 
-      if not self.drawEmpty(): self.newWord()
+            if not self.drawEmpty(): self.newWord()
 
-    self.roundUpdate()
-    # Cancel timer
+            self.roundUpdate()
+            # Cancel timer
 
-    return self.score()
+        return self.score()
 
 def test():
-  settings = ConfigParser.ConfigParser()
-  settings.read('settings.ini')
-  rounds = settings.get("example", "round_options")
+    settings = ConfigParser.ConfigParser()
+    settings.read('settings.ini')
+    rounds = settings.get("example", "round_options")
 
-  players = input("How many players? ")
-  game = Game(players, rounds, time)
+    players = input("How many players? ")
+    game = Game(players, rounds, time)
 
-  score = game.roundPlay()
-  while(score[2] + 1 < r):
-    print 'ROUND {} END'.format(game.getRound())
-    if score[0] > score[1]:
-      print 'TEAM 1 LEADS {} : {}'.format(score[0], score[1])
-    elif score[0] == score[1]:
-      print 'TIED {} : {}'.format(score[0], score[0])
-    else:
-      print 'TEAM 2 LEADS {} : {}'.format(score[1], score[2])
-    if (game.getRound()):
-      score = game.roundPlay()
-
-  settings_data.close()
+    score = game.roundPlay()
+    while(score[2] + 1 < r):
+        print 'ROUND {} END'.format(game.getRound())
+        if score[0] > score[1]:
+            print 'TEAM 1 LEADS {} : {}'.format(score[0], score[1])
+        elif score[0] == score[1]:
+            print 'TIED {} : {}'.format(score[0], score[0])
+        else:
+            print 'TEAM 2 LEADS {} : {}'.format(score[1], score[2])
+        if (game.getRound()):
+            score = game.roundPlay()
+    settings_data.close()
 test()
