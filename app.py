@@ -141,7 +141,7 @@ class AboutScreen(Screen):
 class RulesScreen(Screen):
     hue = NumericProperty(3)
 
-class DurationClock(Screen):
+class DurationClock(Label):
     def update(self, index, *args):
         self.text = index
 
