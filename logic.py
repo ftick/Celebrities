@@ -11,7 +11,6 @@ T1 = 3
 T2 = 4
 DEBUG = True
 
-
 def getWord():
   print('\n' * 30)
   return raw_input("Word: ")
@@ -159,7 +158,7 @@ class Game:
 
   # Move active no pile back into draw_pile amd shuffle
   def turnUpdate(self):
-    self.timer.cancel()
+    # self.timer.cancel()
     self.draw_pile.insert_deck(self.team1.remNo())
     self.draw_pile.insert_deck(self.team2.remNo())
     self.switch()
@@ -169,21 +168,17 @@ class Game:
     if self.time > 0:
       if DEBUG: print(self.time)
       self.time -= 1
-      self.timer.cancel()
+      # Cancel timer
       if not self.roundOver():
-        self.tick()
+        # Start timer
+        pass
     else:
       self.turnUpdate()
-      self.timer.cancel()
+      # Cancel timer
       if not self.roundOver():
-        print "Team {}, pass the phone".format({self.active - 2})
+        # Pass phone screen
         self.time = self.roundLength
         self.show()
-
-  # Ticks the timer
-  def tick(self):
-    self.timer = Timer(1, self.tickAction)
-    self.timer.start()
 
   # Displays a drawn word, adds to team's collection
   def newWord(self):
@@ -198,7 +193,7 @@ class Game:
 
   def show(self):
     showWord(self.card)
-    self.tick()
+    # self.tick()
 
   # Returns true if active no pile is empty
   def activeEmpty(self):
@@ -234,7 +229,7 @@ class Game:
       if not self.drawEmpty(): self.newWord()
 
     self.roundUpdate()
-    self.timer.cancel()
+    # Cancel timer
 
     return self.score()
 
@@ -242,14 +237,6 @@ def test():
   settings = ConfigParser.ConfigParser()
   settings.read('settings.ini')
   rounds = settings.get("example", "round_options")
-  time_set = settings.get("example", "timer_options")
-  time = 0
-  if time_set == '2 min':
-    time = 120
-  elif time_set == '1 min':
-    time = 60
-  else:
-    time = 30
 
   players = input("How many players? ")
   game = Game(players, rounds, time)

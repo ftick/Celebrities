@@ -130,10 +130,6 @@ class MenuScreen(Screen):
 
 class SettingsScreen(Screen):
     hue = NumericProperty(1)
-    cards_per_player = 1
-    rounds = 1
-    players = 1
-    round_timer = 60
 
 class AboutScreen(Screen):
     hue = NumericProperty(2)
