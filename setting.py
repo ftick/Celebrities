@@ -22,11 +22,11 @@ class SettingsApp(App):
     def build(self):
         self.settings_cls = SettingsWithSidebar
         self.use_kivy_settings = False
-        setting = self.config.get('example', 'custom_card_options')
+        setting = self.config.get('Options', 'custom_card_options')
         return Interface()
 
     def build_config(self, config):
-        config.setdefaults('example', {
+        config.setdefaults('Options', {
             'custom_card_options': True,
             'round_options': '5',
             'timer_options': '1 min',

@@ -51,13 +51,23 @@ class Deck:
 
 class Team:
 
-    def __init__(self, players):
+    def __init__(self, players, playerList):
         self.players = players
+        self.playerList = playerList
         self.active = 0
         self.points = 0
         self.score = 0
         self.yes = Deck()
         self.no = Deck()
+
+    def addPlayer(self, name):
+        self.playerList.append(name)
+
+    def getPlayers(self):
+        return self.playerList
+
+    def clearPlayers(self):
+        self.playerList = []
 
     def clearPoints(self):
         self.points = 0
@@ -151,7 +161,7 @@ class Game:
 
   # Move active no pile back into draw_pile amd shuffle
     def turnUpdate(self):
-    # self.timer.cancel()
+      # self.timer.cancel()
         self.draw_pile.insert_deck(self.team1.remNo())
         self.draw_pile.insert_deck(self.team2.remNo())
         self.switch()
@@ -161,15 +171,15 @@ class Game:
         if self.time > 0:
             if DEBUG: print(self.time)
             self.time -= 1
-            # Cancel timer
+          # Cancel timer
         if not self.roundOver():
-            # Start timer
+          # Start timer
             pass
         else:
             self.turnUpdate()
-            # Cancel timer
+          # Cancel timer
             if not self.roundOver():
-                # Pass phone screen
+              # Pass phone screen
                 self.time = self.roundLength
                 self.show()
 
@@ -186,7 +196,7 @@ class Game:
 
     def show(self):
         showWord(self.card)
-        # self.tick()
+      # self.tick()
 
   # Returns true if active no pile is empty
     def activeEmpty(self):
@@ -222,14 +232,14 @@ class Game:
             if not self.drawEmpty(): self.newWord()
 
             self.roundUpdate()
-            # Cancel timer
+          # Cancel timer
 
         return self.score()
 
 def test():
     settings = ConfigParser.ConfigParser()
     settings.read('settings.ini')
-    rounds = settings.get("example", "round_options")
+    rounds = settings.get("Options", "round_options")
 
     players = input("How many players? ")
     game = Game(players, rounds, time)
