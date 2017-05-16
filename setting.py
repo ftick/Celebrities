@@ -6,14 +6,14 @@ from kivy.uix.settings import SettingsWithSidebar
 
 from settingsjson import settings_json
 
-#Builder.load_string('''
-#<Interface>:
-    #orientation: 'vertical'
-    #Button:
-    #    text: 'open the settings!'
-    #    font_size: 150
-    #    on_release: app.open_settings()
-#''')
+Builder.load_string('''
+<Interface>:
+    orientation: 'vertical'
+    Button:
+        text: 'open the settings!'
+        font_size: 150
+        on_release: app.open_settings()
+''')
 
 #class Interface(BoxLayout):
 #    pass
@@ -23,7 +23,7 @@ class SettingsApp(App):
         self.settings_cls = SettingsWithSidebar
         self.use_kivy_settings = False
         setting = self.config.get('example', 'boolexample')
-        return 
+        return Interface()
 
     def build_config(self, config):
         config.setdefaults('example', {
