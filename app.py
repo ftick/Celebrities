@@ -3,7 +3,11 @@ from kivy.uix.label import Label
 from kivy.properties import NumericProperty
 from kivy.app import App
 from kivy.lang import Builder
-from game import Deck, Team
+from kivy.core.text import Label
+from kivy.core.text.text_layout import layout_text
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
+from logic import Deck, Team
 
 # provides the kivy input for graphics
 Builder.load_string('''
@@ -30,7 +34,7 @@ Builder.load_string('''
         size_hint: None, None
         pos: root.width/4, root.top * 0.25 + 100
         size: 200, 100
-        on_release: root.manager.current = root.manager.next()
+        on_release: root.manager.current = 'turn'
     Button:
         text: 'About'
         size_hint: None, None
@@ -123,6 +127,52 @@ Builder.load_string('''
         size: 250, 100
         pos_hint: {'right': 1}
         on_release: root.manager.current = 'menu'
+
+<TurnScreen>:
+    RelativeLayout:
+        Button:
+            size_hint: None, None
+            size: root.width * 0.1, root.height * 0.1
+            text: 'Dropdown'
+            pos_hint: {'x': 0, 'top': 1}
+            on_release: root.manager.current = 'settings'
+
+        Button:
+            text: 'Round No.'
+            size_hint: None, None
+            size: root.width * 0.9 , root.height * 0.1
+            pos_hint: {'x': 0.1, 'top': 1}
+
+        Button:
+            text: 'Press to start timer'
+            size_hint: None, None
+            size: root.width, root.height * 0.1
+            pos_hint: {'x': 0, 'y': 0.8}
+        Label:
+            text: 'Score 1'
+            font_size: 70
+            center_x: root.width - 200
+            top: root.top * 0.5 -200
+        Button:
+            text: 'My card'
+            size_hint: None, None
+            size: root.width * 0.25, root.height * 0.4
+            pos_hint: {'x': 0.4, 'y': 0.25}
+        Label:
+            text: 'Score 2'
+            font_size: 70
+            center_x: root.width * 0.75
+            top: root.top * 0.6 - 200
+        Button:
+            size_hint: None, None
+            size: root.width * 0.1, root.height * 0.1
+            text: 'Discard'
+            pos_hint: {'x':0 , 'y': 0}
+        Button:
+            size_hint: None, None
+            size: 200, 100
+            text: 'Keep'
+            pos_hint: {'x': 0.9, 'y': 0}
 ''')
 
 class MenuScreen(Screen):
@@ -137,6 +187,8 @@ class AboutScreen(Screen):
 class RulesScreen(Screen):
     hue = NumericProperty(3)
 
+class TurnScreen(Screen):
+    pass
 class DurationClock(Label):
     def update(self, index, *args):
         self.text = index
@@ -146,6 +198,7 @@ class Celebrities(App):
         root = ScreenManager()
         root.add_widget(MenuScreen(name= 'menu'))
         root.add_widget(SettingsScreen(name= 'settings'))
+        root.add_widget(PlayScreen(name= 'turn'))
         root.add_widget(AboutScreen(name= 'about'))
         root.add_widget(RulesScreen(name= 'rules'))
         return root
